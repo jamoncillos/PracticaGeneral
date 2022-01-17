@@ -95,8 +95,21 @@ A\) Un gráfico de barras que represente el número de individuos muestreados de
 ```{r, include=FALSE}
 library(ggplot2)
 ```
+```{r, eval=FALSE}
+subset_especies_isla <-penguins %>% group_by(species, island) %>% 
+  summarise(n_indiv = length(island))
+```
 
 ```{r}
 
+ggplot(data = penguins, aes(x=island, fill=species)) + 
+  geom_bar(position="dodge") + 
+  scale_fill_manual(values = c("dark orange", "purple", "blue")) + 
+  labs (y="Nº Individuos", x= "Isla") +
+  theme_light() + 
+  ggtitle("Esfuerzo de muestreo") + 
+  guides (fill = guide_legend(title="Especies"))
+
+  
 ```
 
