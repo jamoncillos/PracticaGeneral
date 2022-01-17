@@ -6,13 +6,97 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Primero llamo al paquete y hago un `summary (penguins)`
+Primero llamo al paquete con `library (palmerpenguins)` y hago un `summary (penguins)`
 
-```{r cargando los datos}
+```{r cargando los datos, echo=FALSE}
 library(palmerpenguins)
-View(penguins)
 summary(penguins)
 ```
+
+### Primer ejercicio:
+
+A\) Número de individuos totales, masculinos, femeninos y de cada especie
+
+-   Número de individuos totales:
+
+```{r}
+length(penguins$sex)
+```
+
+hay 344 observaciones
+
+-   Número de individuos de cada sexo:
+
+```{r, include=FALSE}
+library(dplyr)
+library(knitr)
+```
+
+`library (dplyr)` 
+`library (knitr)`
+
+```{r}
+n_por_sexo <- penguins %>% group_by(sex) %>% 
+  summarise(sample_size = length(sex))
+kable(n_por_sexo, align = "l")
+```
+
+hay 165 hembras y 168 machos además de 11 individuos sin sexar
+
+-   Número de individuos de cada especie
+
+```{r}
+n_por_especie <- penguins %>% group_by(species) %>% 
+  summarise(sample_size = length(sex))
+kable(n_por_especie, align = "l")
+
+```
+
+hay 152 individuos de la especie adelie, 68 de chinstrap y 124 de gentoo
+
+-   Número de individuos de cada especie por sexo
+
+```{r}
+n_por_especie_y_sexo <- penguins %>% group_by(sex, species) %>% 
+  summarise(sample_size = length(sex))
+kable(n_por_especie_y_sexo, align = "l")
+
+```
+
+B\) La media, desviación estándar, valor mínimo y máximo de la longitud y
+profundidad del pico, la longitud de la aleta y el tamaño.
+
+```{r}
+variables <- c("long_pico", "prof_pico", "long_aleta", "peso")
+
+media <- c(mean(penguins$bill_length_mm, na.rm = T), mean(penguins$bill_depth_mm, na.rm = T), mean(penguins$flipper_length_mm, na.rm = T), mean(penguins$body_mass_g, na.rm = T))
+
+sd <- c(sd(penguins$bill_length_mm, na.rm = T), sd(penguins$bill_depth_mm, na.rm = T), sd(penguins$flipper_length_mm, na.rm = T), sd(penguins$body_mass_g, na.rm = T))
+
+min <- c(min(penguins$bill_length_mm, na.rm = T), min(penguins$bill_depth_mm, na.rm = T), min(penguins$flipper_length_mm, na.rm = T), min(penguins$body_mass_g, na.rm = T))
+
+max<- c(max(penguins$bill_length_mm, na.rm = T), max(penguins$bill_depth_mm, na.rm = T), max(penguins$flipper_length_mm, na.rm = T), max(penguins$body_mass_g, na.rm = T))
+
+descriptiva <- data.frame(variables,media,sd,min,max)
+
+kable(descriptiva, align = "l")
+```
+
+
+### Segundo ejercicio:
+
+A\) Un gráfico de barras que represente el número de individuos muestreados de cada especie en cada isla, representando las especies en diferentes colores (chinstrap – morado, gentoo – azul, adelie – naranja). 
+
+`library (ggplot2)`
+
+```{r, include=FALSE}
+library(ggplot2)
+```
+
+```{r}
+
+```
+

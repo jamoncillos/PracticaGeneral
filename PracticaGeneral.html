@@ -171,7 +171,7 @@ pre code {
 </div>
 
 
-<p>Primero llamo al paquete y hago un <code>summary (penguins)</code></p>
+<p>Primero llamo al paquete con <code>library (palmerpenguins)</code> y hago un <code>summary (penguins)</code></p>
 <pre><code>##       species          island    bill_length_mm  bill_depth_mm  
 ##  Adelie   :152   Biscoe   :168   Min.   :32.10   Min.   :13.10  
 ##  Chinstrap: 68   Dream    :124   1st Qu.:39.23   1st Qu.:15.60  
@@ -188,6 +188,188 @@ pre code {
 ##  3rd Qu.:213.0     3rd Qu.:4750                3rd Qu.:2009  
 ##  Max.   :231.0     Max.   :6300                Max.   :2009  
 ##  NA&#39;s   :2         NA&#39;s   :2</code></pre>
+<div id="primer-ejercicio" class="section level3">
+<h3>Primer ejercicio:</h3>
+<p>A) Número de individuos totales, masculinos, femeninos y de cada especie</p>
+<ul>
+<li>Número de individuos totales:</li>
+</ul>
+<pre class="r"><code>length(penguins$sex)</code></pre>
+<pre><code>## [1] 344</code></pre>
+<p>hay 344 observaciones</p>
+<ul>
+<li>Número de individuos de cada sexo:</li>
+</ul>
+<p><code>library (dplyr) library (knitr)</code></p>
+<pre class="r"><code>n_por_sexo &lt;- penguins %&gt;% group_by(sex) %&gt;% 
+  summarise(sample_size = length(sex))
+kable(n_por_sexo, align = &quot;l&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">sex</th>
+<th align="left">sample_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">female</td>
+<td align="left">165</td>
+</tr>
+<tr class="even">
+<td align="left">male</td>
+<td align="left">168</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">11</td>
+</tr>
+</tbody>
+</table>
+<p>hay 165 hembras y 168 machos además de 11 individuos sin sexar</p>
+<ul>
+<li>Número de individuos de cada especie</li>
+</ul>
+<pre class="r"><code>n_por_especie &lt;- penguins %&gt;% group_by(species) %&gt;% 
+  summarise(sample_size = length(sex))
+kable(n_por_especie, align = &quot;l&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">species</th>
+<th align="left">sample_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Adelie</td>
+<td align="left">152</td>
+</tr>
+<tr class="even">
+<td align="left">Chinstrap</td>
+<td align="left">68</td>
+</tr>
+<tr class="odd">
+<td align="left">Gentoo</td>
+<td align="left">124</td>
+</tr>
+</tbody>
+</table>
+<p>hay 152 individuos de la especie adelie, 68 de chinstrap y 124 de gentoo</p>
+<ul>
+<li>Número de individuos de cada especie por sexo</li>
+</ul>
+<pre class="r"><code>n_por_especie_y_sexo &lt;- penguins %&gt;% group_by(sex, species) %&gt;% 
+  summarise(sample_size = length(sex))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;sex&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>kable(n_por_especie_y_sexo, align = &quot;l&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">sex</th>
+<th align="left">species</th>
+<th align="left">sample_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">female</td>
+<td align="left">Adelie</td>
+<td align="left">73</td>
+</tr>
+<tr class="even">
+<td align="left">female</td>
+<td align="left">Chinstrap</td>
+<td align="left">34</td>
+</tr>
+<tr class="odd">
+<td align="left">female</td>
+<td align="left">Gentoo</td>
+<td align="left">58</td>
+</tr>
+<tr class="even">
+<td align="left">male</td>
+<td align="left">Adelie</td>
+<td align="left">73</td>
+</tr>
+<tr class="odd">
+<td align="left">male</td>
+<td align="left">Chinstrap</td>
+<td align="left">34</td>
+</tr>
+<tr class="even">
+<td align="left">male</td>
+<td align="left">Gentoo</td>
+<td align="left">61</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">Adelie</td>
+<td align="left">6</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="left">Gentoo</td>
+<td align="left">5</td>
+</tr>
+</tbody>
+</table>
+<p>B) La media, desviación estándar, valor mínimo y máximo de la longitud y profundidad del pico, la longitud de la aleta y el tamaño.</p>
+<pre class="r"><code>variables &lt;- c(&quot;long_pico&quot;, &quot;prof_pico&quot;, &quot;long_aleta&quot;, &quot;peso&quot;)
+
+media &lt;- c(mean(penguins$bill_length_mm, na.rm = T), mean(penguins$bill_depth_mm, na.rm = T), mean(penguins$flipper_length_mm, na.rm = T), mean(penguins$body_mass_g, na.rm = T))
+
+sd &lt;- c(sd(penguins$bill_length_mm, na.rm = T), sd(penguins$bill_depth_mm, na.rm = T), sd(penguins$flipper_length_mm, na.rm = T), sd(penguins$body_mass_g, na.rm = T))
+
+min &lt;- c(min(penguins$bill_length_mm, na.rm = T), min(penguins$bill_depth_mm, na.rm = T), min(penguins$flipper_length_mm, na.rm = T), min(penguins$body_mass_g, na.rm = T))
+
+max&lt;- c(max(penguins$bill_length_mm, na.rm = T), max(penguins$bill_depth_mm, na.rm = T), max(penguins$flipper_length_mm, na.rm = T), max(penguins$body_mass_g, na.rm = T))
+
+descriptiva &lt;- data.frame(variables,media,sd,min,max)
+
+kable(descriptiva, align = &quot;l&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">variables</th>
+<th align="left">media</th>
+<th align="left">sd</th>
+<th align="left">min</th>
+<th align="left">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">long_pico</td>
+<td align="left">43.92193</td>
+<td align="left">5.459584</td>
+<td align="left">32.1</td>
+<td align="left">59.6</td>
+</tr>
+<tr class="even">
+<td align="left">prof_pico</td>
+<td align="left">17.15117</td>
+<td align="left">1.974793</td>
+<td align="left">13.1</td>
+<td align="left">21.5</td>
+</tr>
+<tr class="odd">
+<td align="left">long_aleta</td>
+<td align="left">200.91520</td>
+<td align="left">14.061714</td>
+<td align="left">172.0</td>
+<td align="left">231.0</td>
+</tr>
+<tr class="even">
+<td align="left">peso</td>
+<td align="left">4201.75439</td>
+<td align="left">801.954536</td>
+<td align="left">2700.0</td>
+<td align="left">6300.0</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 
 
