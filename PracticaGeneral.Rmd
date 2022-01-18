@@ -154,7 +154,8 @@ geom_boxplot(width = 0.8) +
   theme_light() + 
   labs(y= element_blank(), x="Sexo") + 
   ggtitle("especie Adelie") +
-  theme(legend.position = "none")
+  theme(legend.position = "none") + 
+  coord_cartesian(ylim = c(2500,6500))
 
 pingus_chinstrap <- penguins %>% filter(species == "Chinstrap") %>% na.omit()
 box_chinstrap<-ggplot(data = pingus_chinstrap, aes(x=sex, y=body_mass_g, fill=sex)) +
@@ -162,7 +163,8 @@ box_chinstrap<-ggplot(data = pingus_chinstrap, aes(x=sex, y=body_mass_g, fill=se
   theme_light() + 
   labs( x="Sexo", y= "Peso corporal") + 
   ggtitle("especie Chinstrap") +
-  theme(legend.position = "none")
+  theme(legend.position = "none")+ 
+  coord_cartesian(ylim = c(2500,6500))
 
 pingus_gentoo <- penguins %>% filter( species == "Gentoo") %>% na.omit()
 box_gentoo<-ggplot(data = pingus_gentoo, aes(x=sex, y=body_mass_g, fill=sex)) +
@@ -170,7 +172,8 @@ box_gentoo<-ggplot(data = pingus_gentoo, aes(x=sex, y=body_mass_g, fill=sex)) +
   theme_light() + 
   labs( x="Sexo", y=element_blank()) + 
   ggtitle("especie Gentoo") +
-  theme(legend.position = "none")
+  theme(legend.position = "none")+ 
+  coord_cartesian(ylim = c(2500,6500))
 
 box_chinstrap + box_adelie + box_gentoo
 ```
