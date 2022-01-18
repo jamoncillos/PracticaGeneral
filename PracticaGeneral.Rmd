@@ -33,15 +33,18 @@ hay 344 observaciones
 ```{r, include=FALSE}
 library(dplyr)
 library(knitr)
+library(kableExtra)
 ```
 
 `library (dplyr)` 
 `library (knitr)`
+`library (kableExtra)`
 
 ```{r}
 n_por_sexo <- penguins %>% group_by(sex) %>% 
   summarise(sample_size = length(sex))
-kable(n_por_sexo, align = "l")
+kable(n_por_sexo, align = "l", caption = "Número de individuos de cada sexo") %>% 
+  kable_minimal(full_width = F, position="left")
 ```
 
 hay 165 hembras y 168 machos además de 11 individuos sin sexar
@@ -51,7 +54,8 @@ hay 165 hembras y 168 machos además de 11 individuos sin sexar
 ```{r}
 n_por_especie <- penguins %>% group_by(species) %>% 
   summarise(sample_size = length(sex))
-kable(n_por_especie, align = "l")
+kable(n_por_especie, align = "l", caption = "Número de individuos de cada especie")%>% 
+  kable_minimal(full_width = F, position="left")
 
 ```
 
@@ -62,7 +66,8 @@ hay 152 individuos de la especie adelie, 68 de chinstrap y 124 de gentoo
 ```{r}
 n_por_especie_y_sexo <- penguins %>% group_by(sex, species) %>% 
   summarise(sample_size = length(sex))
-kable(n_por_especie_y_sexo, align = "l")
+kable(n_por_especie_y_sexo, align = "l", caption = "Número de individuos de cada grupo")%>% 
+  kable_minimal(full_width = F, position="left")
 
 ```
 
@@ -82,7 +87,8 @@ max<- c(max(penguins$bill_length_mm, na.rm = T), max(penguins$bill_depth_mm, na.
 
 descriptiva <- data.frame(variables,media,sd,min,max)
 
-kable(descriptiva, align = "l")
+kable(descriptiva, align = "l", caption = "Estadística descriptiva de las variables")%>% 
+  kable_minimal(full_width = F, position="left")
 ```
 
 
