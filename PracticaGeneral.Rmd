@@ -3,13 +3,15 @@ title: "PracticaGeneralResuelta"
 author: "Jorge A. Martín"
 date: "17/1/2022"
 output: html_document
+bibliography: references.bib
+csl: harvard-cite-them-right.csl
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Primero llamo al paquete con `library (palmerpenguins)` y hago un `summary (penguins)`
+Primero llamo al paquete con `library (palmerpenguins)` [@horst2020]y hago un `summary (penguins)`
 
 ```{r cargando los datos, echo=FALSE}
 library(palmerpenguins)
@@ -22,11 +24,9 @@ A\) Número de individuos totales, masculinos, femeninos y de cada especie
 
 -   Número de individuos totales:
 
-```{r}
-length(penguins$sex)
-```
+`nrow(penguins)`
 
-hay 344 observaciones
+hay `r nrow(penguins)` observaciones
 
 -   Número de individuos de cada sexo:
 
@@ -36,9 +36,11 @@ library(knitr)
 library(kableExtra)
 ```
 
-`library (dplyr)` 
-`library (knitr)`
-`library (kableExtra)`
+`library (dplyr)` [@wickham2021]
+
+`library (knitr)` [@xie2021]
+
+`library (kableExtra)` [@zhu2021]
 
 ```{r}
 n_por_sexo <- penguins %>% group_by(sex) %>% 
@@ -71,8 +73,7 @@ kable(n_por_especie_y_sexo, align = "l", caption = "Número de individuos de cad
 
 ```
 
-B\) La media, desviación estándar, valor mínimo y máximo de la longitud y
-profundidad del pico, la longitud de la aleta y el tamaño.
+B\) La media, desviación estándar, valor mínimo y máximo de la longitud y profundidad del pico, la longitud de la aleta y el tamaño.
 
 ```{r}
 variables <- c("long_pico", "prof_pico", "long_aleta", "peso")
@@ -91,16 +92,16 @@ kable(descriptiva, align = "l", caption = "Estadística descriptiva de las varia
   kable_minimal(full_width = F, position="left")
 ```
 
-
 ### Segundo ejercicio:
 
-A\) Un gráfico de barras que represente el número de individuos muestreados de cada especie en cada isla, representando las especies en diferentes colores (chinstrap – morado, gentoo – azul, adelie – naranja). 
+A\) Un gráfico de barras que represente el número de individuos muestreados de cada especie en cada isla, representando las especies en diferentes colores (chinstrap -- morado, gentoo -- azul, adelie -- naranja).
 
-`library (ggplot2)`
+`library (ggplot2)` [@wickham2021]
 
 ```{r, include=FALSE}
 library(ggplot2)
 ```
+
 ```{r, eval=FALSE}
 subset_especies_isla <-penguins %>% group_by(species, island) %>% 
   summarise(n_indiv = length(island))
@@ -109,8 +110,8 @@ subset_especies_isla <-penguins %>% group_by(species, island) %>%
 ```{r}
 
 ggplot(data = penguins, aes(x=island, fill=species)) + 
-  geom_bar(position="dodge") + 
-  scale_fill_manual(values = c("dark orange", "purple", "blue")) + 
+  geom_bar(position="dodge", width=0.6) + 
+  scale_fill_manual(values = c("dark orange", "purple", "light blue")) + 
   labs (y="Nº Individuos", x= "Isla") +
   theme_light() + 
   ggtitle("Esfuerzo de muestreo") + 
@@ -119,3 +120,69 @@ ggplot(data = penguins, aes(x=island, fill=species)) +
   
 ```
 
+B\) Responde:
+
+-   ¿Qué especie se ha muestreado en todas las islas?
+
+Adelie
+
+-   ¿Cuántos individuos se han muestreado en la isla Dream?
+
+```{r}
+n_por_islas<-penguins %>% count(island)
+kable(n_por_islas, align = "l", caption = "Individuos muestreados por cada isla")%>% 
+  kable_minimal(full_width = F, position="left")
+
+```
+
+Se muestrearon 124 individuos en la isla Dream
+
+### Tercer ejercicio:
+
+A\) Gráfico multipanel de cajas y bigotes con el tamaño de los pingüinos sgún su sexo, en cada panel una especie.
+
+Necesito el paquete patchwork `library(patchwork)`[@pedersen2020]
+
+```{r, include=FALSE}
+library(patchwork) 
+```
+
+```{r}
+pingus_adelie <- penguins %>% filter( species =="Adelie") %>% na.omit() 
+box_adelie<-ggplot(data = pingus_adelie, aes(x=sex, y=body_mass_g, fill=sex)) +
+geom_boxplot(width = 0.8) + 
+  theme_light() + 
+  labs(y= element_blank(), x="Sexo") + 
+  ggtitle("especie Adelie") +
+  theme(legend.position = "none")
+
+pingus_chinstrap <- penguins %>% filter(species == "Chinstrap") %>% na.omit()
+box_chinstrap<-ggplot(data = pingus_chinstrap, aes(x=sex, y=body_mass_g, fill=sex)) +
+  geom_boxplot(width = 0.8) + 
+  theme_light() + 
+  labs( x="Sexo", y= "Peso corporal") + 
+  ggtitle("especie Chinstrap") +
+  theme(legend.position = "none")
+
+pingus_gentoo <- penguins %>% filter( species == "Gentoo") %>% na.omit()
+box_gentoo<-ggplot(data = pingus_gentoo, aes(x=sex, y=body_mass_g, fill=sex)) +
+  geom_boxplot(width = 0.8) + 
+  theme_light() + 
+  labs( x="Sexo", y=element_blank()) + 
+  ggtitle("especie Gentoo") +
+  theme(legend.position = "none")
+
+box_chinstrap + box_adelie + box_gentoo
+```
+
+B\) Contesta:
+
+-   ¿Qué especie tiene mayor tamaño?
+
+la especie Gentoo
+
+-   ¿En qué especie hembras y machos tienen tamaños similares?
+
+en la especie Chinstrap
+
+### Referencias
